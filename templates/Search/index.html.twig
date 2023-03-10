@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recette index{% endblock %}
+
+{% block body %}
+    {{ include('home_page/_form.html.twig') }}
+
+    <div style="background-color:white" class="album py-5 ">
+        <div class="container">
+            <div class="row">
+                <h2 class ="LastRecette"><i class="fa-solid fa-book"></i> Voici les résultats de votre recherche ({{ recettes|length }}) : {{ name }}  </h2>
+                {% for recette in recettes %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <img style="min-height:300px;max-height:300px" class="card-img-top"  src="{{ asset('/uploads/' ~ recette.image )  }}" alt="mon image">
+                            <div class="card-body">
+                                <p class="card-text">{{recette.name}}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+
+                                        <a href="{{ path('app_home_page_show', {'id': recette.id} ) }}" class="btn btn-sm btn-outline-secondary">Voir plus</a>
+                                        {% if app.user == null %}
+
+                                        {% else %}
+                                            {% if is_granted('ROLE_ADMIN') or recette.users == app.user  %}
+                                                <a href={{ path('app_home_page_edit', {'id': recette.id} ) }} class="btn btn-sm btn-outline-secondary">Modifié</a>
+                                            {% else %}
+
+                                            {% endif %}
+                                        {% endif %}
+
+                                    </div>
+                                    <small class="text-muted">{{recette.users}}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

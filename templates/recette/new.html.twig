@@ -1,0 +1,148 @@
+{% extends './base.html.twig' %}
+
+{% block title %}New Recette{% endblock %}
+
+{% block body %}
+
+    <div class="main">
+            <div class="newRecipe" style="background: white">
+                <h1 class="text-center">Ajoute une recette</h1>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.name, 'Nom de votre recette') }}
+                    {{ form_widget(form.name) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.descriptions) }}
+                    {{ form_widget(form.descriptions) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.images) }}
+                    {{ form_widget(form.images) }}
+                </div>
+                <h2 class="text-center">Détails de la recette : </h2>
+                <div class="form-group">
+                    {{ form_label(form.category, 'Séléctionner une / des catégories') }}
+                    {{ form_widget(form.category) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.ingredients, 'Séléctionner un / des ingredients') }}
+                    {{ form_widget(form.ingredients) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.creationTime, 'Indiquez le temps de création') }}
+                    {{ form_widget(form.creationTime) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.numberOfPersons, 'Pour combien de personnes le plat est destinée') }}
+                    {{ form_widget(form.numberOfPersons) }}
+                </div>
+                <h2 class="text-center">Étape(s) : </h2>
+                <div {{ stimulus_controller('form-collection') }}
+                        data-form-collection-index-value="{{ form.recipeStep|length > 0 ? form.recipeStep|last.vars.name + 1 : 0 }}"
+                        data-form-collection-prototype-value="{{ form_widget(form.recipeStep.vars.prototype)|e('html_attr') }}"
+                >
+                    <div class="form-group" {{ stimulus_target('form-collection', 'collectionContainer') }}>
+
+                        {% for recipeStep in form.recipeStep %}
+
+                            <div>
+                                {{ form_label(recipeStep.name, 'Entrer le nom de Votre Etape') }}
+                                {{ form_widget(recipeStep.name) }}
+                                {{ form_errors(recipeStep.name) }}
+                            </div>
+                            <div>
+                                {{ form_label(recipeStep.descriptions) }}
+                                {{ form_widget(recipeStep.descriptions) }}
+                                {{ form_errors(recipeStep.descriptions) }}
+                            </div>
+                        {% endfor %}
+                    <hr style="width: 50%; margin-left: auto; margin-right: auto; color: black;">
+                    </div>
+                    <button style="margin-bottom: 3%" class="btn btn-primary" type="button" {{ stimulus_action('form-collection', 'addCollectionElement') }}>Ajouter une étape</button>
+                </div>
+                <div class="submitRecipe">
+                    <button style="background: #ff4269; border: white" type="submit" class="btn btn-primary">Ajouter une recette</button>
+                    {# <a href="{{ path('app_home_page_index') }}">back to list</a> #}
+                </div>
+                {{ form_end(form) }}
+            </div>
+    </div>
+
+    <style>
+        .main {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+
+            align-items: center;
+            background: url("{{ asset('uploads/rose.jpeg') }}") center / cover no-repeat;
+        }
+        .flex{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .newRecipe{
+            width: 70%;
+            padding:40px ;
+            border: solid 1px black;
+            margin: 100px 0px;
+            border-radius: 10px;
+        }
+
+        .ts-control{
+            border: none;
+            overflow: hidden;
+            box-shadow: unset;
+            border-radius: unset;
+            padding: unset;
+        }
+
+        .form-group{
+            margin-bottom: 15px;
+        }
+
+        h1{
+            color : #ff4269;
+            font-weight: 300;
+        }
+
+        h2{
+            color : #ff4269;
+            font-weight: 300;
+        }
+
+        label{
+            color: #0d6efd
+        }
+
+        .btnMargin{
+            margin-bottom: 10px;
+        }
+
+        .submitRecipe{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .submitRecipe button{
+            padding: 15px;
+        }
+
+        .ts-wrapper.multi .ts-control [data-value]{
+            background: #ff4269;
+            background-image: unset;
+            border: black solid 1px;
+            border: unset;
+        }
+
+        .ts-wrapper.plugin-remove_button:not(.rtl) .item .remove {
+            border-left: 1px solid white;
+        }
+    </style>
+
+    {% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+
+    {{ include('user/_headerProfil.html.twig') }}
+    {{ include('user/_userRecipe.html.twig') }}
+
+    <style>
+        .chooseFilter div a:nth-child(3){
+            color: #ff4269;
+        }
+    </style>
+
+{% endblock %}

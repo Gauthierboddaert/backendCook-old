@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recette index{% endblock %}
+
+{% block body %}
+
+
+<main role="main">
+    {{ include('home_page/_form.html.twig') }}
+
+    <h2 class ="LastRecette"><i class="fa-solid fa-book"></i> Les 3 dernières recettes ! </h2>
+    {% for recette in recettes %}
+        <section class="containerRecipe">
+            <div class="recipe">
+                <div style="background-image: url({{ asset('/uploads/' ~ recette.image ) }});" class="recipeLeftPart recipeImg">
+                    {% if app.user is not null %}
+                        {% if recette.likes|length > 0 %}
+                            {% set firstLike = recette.likes.first %}
+                            <i class="fa-solid fa-heart {% if firstLike.isLike %}liked{% else %}not-liked{% endif %}"  data-recipe-id="{{ recette.id }}"></i>
+                        {% else %}
+                            <i class="fa-solid fa-heart not-liked" data-recipe-id="{{ recette.id }}"></i>
+                        {% endif %}
+                    {% endif %}
+                    {# <img src="{{ asset('/uploads/' ~ recette.image )  }}" alt="mon image"> #}
+                </div>
+                <div class="recipeRightPart">
+                    <h4>{{ recette.name }}</h4>
+                    <p>{{ recette.descriptions }}</p>
+                    <div class="buttonCRUD">
+                        {% if app.user == null %}
+
+                        {% else %}
+                            {% if is_granted('ROLE_ADMIN') or recette.users == app.user  %}
+                                <a class="showRecipe" href="{{ path('app_home_page_edit', {'id': recette.id} ) }}" class="btn btn-sm btn-outline-secondary">Modifié |</a>
+                            {% else %}
+                            {% endif %}
+                        {% endif %}
+                        <a class="showRecipe" href="{{ path('app_home_page_show', {'id': recette.id} ) }}" class="btn btn-sm btn-outline-secondary">Voir plus</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <hr style="width: 50%; margin-left: auto; margin-right: auto; color: black;">
+    {% endfor %}
+
+
+</main>
+
+    <style>
+        .fa-solid.fa-heart.clicked {
+            animation: pulse 0.090s ease-in-out;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.5);
+            }
+        }
+
+        .recipeImg i{
+            display: none;
+            font-size: 30px;
+        }
+
+        .liked{
+            color: red;
+        }
+
+        .not-liked{
+            color: black;
+        }
+        .buttonCRUD{
+            width: 100%;
+            display: flex;
+            justify-content: end;
+        }
+        .buttonCRUD a{
+            margin-left: 3px;
+        }
+
+        .recipeLeftPart{
+            display: flex;
+            width: 35%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            border-right: solid 1px black;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .recipeLeftPart img{
+            min-width: 100%;
+            max-height: 100%;
+            min-width: 100%;
+            border-right: solid 1px black;
+            min-height: 100%;
+            image-rendering: high-quality;
+
+        }
+
+        .recipeRightPart{
+            padding: 0px 40px;
+            width: 65%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .recipeRightPart h4{
+            margin-top: 5px;
+
+        }
+        .recipe{
+            width: 80%;
+            height: 300px;
+            display: flex;
+            background: white;
+            font-family: 'Red Hat Text', sans-serif;
+            box-shadow: 2px 0px 0px #ff4269;
+        }
+
+        .containerRecipe{
+            width: 100%;
+            display: flex;
+            border-radius: 100px;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        .LastRecette{
+            margin-top: 40px;
+
+        }
+
+        img{
+            width: 100%;
+            height: 100%;
+        }
+
+        main{
+            background: #FAFAFA;
+        }
+
+    </style>
+
+
+{% endblock %}

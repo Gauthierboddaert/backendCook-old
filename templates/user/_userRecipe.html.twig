@@ -1,0 +1,107 @@
+{% block body %}
+    <section class="typeOfRecipeByUser">
+        {% for recette in recettes %}
+            <div class="recipe">
+                <div style="background:url({{ asset('/uploads/' ~ recette.image ) }}) center / cover no-repeat;" class="recipeImg">
+                    {% if recette.likes|length > 0 %}
+                        {% set firstLike = recette.likes.first %}
+                        <i class="fa-solid fa-heart {% if firstLike.isLike %}liked{% else %}not-liked{% endif %}"  data-recipe-id="{{ recette.id }}"></i>
+                    {% else %}
+                        <i class="fa-solid fa-heart not-liked" data-recipe-id="{{ recette.id }}"></i>
+                    {% endif %}
+                    {# <i class="fa-solid fa-heart {% if recette.likes.first.isLike %}liked{% else %}not-liked{% endif %}"  data-recipe-id="{{ recette.id }}"></i>  #}
+                </div>
+                <div class="recipeInfos">
+                    <p>{{ recette.name }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+    <div class="pagination">{{ knp_pagination_render(recettes) }}</div>
+
+    <style>
+        .pagination{
+            display: flex;
+            margin-bottom: 15px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pagination span{
+            padding: 0px 2px;
+            font-family: 'Red Hat Text', sans-serif;
+            font-size: 17px;
+        }
+
+        .recipeInfos{
+            width: 100%;
+            height: 25%;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .recipeInfos p{
+            font-size: 18px;
+            font-family: 'Red Hat Text', sans-serif;
+            font-weight:bolder;
+            padding: 12px;
+            color: black;
+        }
+
+        .recipe{
+            width: 414px;
+            height: 400px;
+            background: white;
+            margin-bottom: 50px;
+            border: 1px solid #dfdfdf;
+            border-radius: 10px;
+        }
+        .recipeImg{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 75%;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .recipeImg i{
+            display: none;
+            font-size: 30px;
+        }
+
+        .liked{
+            color: red;
+        }
+
+        .not-liked{
+            color: white;
+        }
+
+        .typeOfRecipeByUser{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto;
+            grid-gap: 20px;
+            width: 80%;
+            max-width: 1400px;
+            margin: 0 auto;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fa-solid.fa-heart.clicked {
+            animation: pulse 0.090s ease-in-out;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.5);
+            }
+        }
+    </style>
+{% endblock %}
